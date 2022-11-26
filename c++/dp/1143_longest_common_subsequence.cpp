@@ -18,19 +18,25 @@ class Solution
 {
 public:
     int longestCommonSubsequence(string text1, string text2)
-    {
+    { // example: text1 = "abcde", text2 = "ace"
         int longest = 0;
-        vector<int> memo(text1.size(), 0);
-        // base case
-        for (int i = 0; i < text2.size(); i++)
+        vector<vector<int>> memo(text1.size() + 1, vector<int>(text2.size() + 1, 0));
+        // iterate through 2d vector
+        for (int col = text2.size() - 1; col >= 0; col--)
         {
-            if (find(text1.begin(), text1.end(), text2[i]) != text1.end())
-            { // the character exists in the other string
-                int index = find(text1.begin(), text1.end(), text2[i]) - text1.begin();
-            }
-            for (int j = 0; j < text1.size(); j++)
+            for (int row = text1.size() - 1; row >= 0; row--)
             {
+                if (text2[col] == text1[row])
+                { // same character
+                    memo[row][col] = 1 + memo[row + 1][col + 1];
+                }
+                else
+                {
+                    memo[row][col] = max(memo[row + 1][col], memo[row][col + 1]);
+                }
             }
         }
+        return memo[0][0];
     }
 };
+// time: O(MN), space: 2d vector O(MN)
