@@ -10,6 +10,8 @@ The tree tree could also be considered as a subtree of itself.
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <set>
+#include <queue>
 using namespace std;
 
 // Definition for a binary tree node.
@@ -26,26 +28,22 @@ struct TreeNode
 class Solution
 {
 public:
-    TreeNode *helper(TreeNode *r, TreeNode *subr)
-    {
-        TreeNode *potential = nullptr;
-        while (r != nullptr)
+    bool match_helper(TreeNode *r, TreeNode *subr)
+    { // matching root
+        if (r == nullptr || subr == nullptr)
         {
-            if (r != nullptr && r->val == subr->val)
-                return r;
+            return (r == nullptr && subr == nullptr);
         }
-        return potential;
+        return (r->val == subr->val && match_helper(r->left, subr->left) && match_helper(r->right, subr->right));
     };
 
     bool isSubtree(TreeNode *root, TreeNode *subRoot)
     {
-        TreeNode *potential = nullptr;
-        while (root != nullptr)
-        {
-        }
-        if (potential == nullptr)
+        if (root == nullptr)
             return false;
-        else
+        if (match_helper(root, subRoot))
             return true;
+        return (isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot));
     }
 };
+// time: O(MN), space: O(M+N)
