@@ -30,30 +30,17 @@ struct TreeNode
 class Solution
 {
 public:
-    bool helper_validate(TreeNode *t)
+    bool helper_validate(TreeNode *t, TreeNode *low, TreeNode *high)
     {
-        if (t->left == nullptr && t->right == nullptr)
+        if (t == nullptr)
         {
             return true;
         }
-        int value = t->val;
-        if (t->left != nullptr)
+        if ((low != nullptr && t->val <= low->val) || (high != nullptr && high->val <= t->val))
         {
-            if (t->left->val >= value)
-            {
-                break;
-            }
-            return helper_validate(t->left);
+            return false;
         }
-        if (t->right != nullptr)
-        {
-            if (t->right->val <= value)
-            {
-                break;
-            }
-            return helper_validate(t->right);
-        }
-        return false;
+        return (helper_validate(t->left, low, t) && helper_validate(t->right, t, high));
     };
 
     bool isValidBST(TreeNode *root)
@@ -62,6 +49,7 @@ public:
         {
             return true;
         }
-        return helper_validate(root);
+        return helper_validate(root, nullptr, nullptr);
     }
 };
+// time: O(n), space: O(n)
