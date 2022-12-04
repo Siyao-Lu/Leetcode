@@ -22,11 +22,13 @@ public:
             {
                 nums[index] = nums[i];
                 nums[i] = num;
+                break;
             }
-            else if (nums[i] > num && nums[i + 1] < num)
+            else if (nums[i] > num && nums[i + 1] <= num)
             {
                 nums[index] = nums[i];
                 nums[i] = num;
+                break;
             }
         }
     };
@@ -52,19 +54,20 @@ public:
         {
             if (nums[i] > nums[i - 1])
             {
-                swap(nums, i - 1);
+                swap(nums, i - 1); // choose the next minimum to swap with
                 target = i;
                 break;
             }
         }
         if (target != -1)
         {
-            reverse(nums, target);
+            reverse(nums, target); // after swap, to the right is in strict descending order, reverse it
         }
         else
         {
-            // no match, must swap the first element
+            // no match => vector is in strict descending order => simply reverse the vector
             reverse(nums, 0);
         }
     }
 };
+// time: O(n), space: O(1)
