@@ -10,6 +10,7 @@ a list (List[Node]) of its neighbors.
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <unordered_map>
 using namespace std;
 // Definition for a Node.
 class Node
@@ -37,27 +38,21 @@ public:
 class Solution
 {
 public:
-    void copy_helper(Node *to, Node *from)
-    { // copy neighbor array
-        to->val = from->val;
-        if (from->neighbors.size() != 0)
-        {
-            for (auto n : from->neighbors)
-            {
-                Node *next();
-                to->neighbors.push_back(next);
-                copy_helper(next, n);
-            }
-        }
-    };
-
+    unordered_map<Node *, Node *> mp;
     Node *cloneGraph(Node *node)
     {
-        Node *copy;
-        if (node != nullptr)
+        if (node == nullptr)
+            return nullptr;
+        Node *start = new Node(node->val);
+        mp[node] = start;
+        for (auto n : node->neighbors)
         {
-            copy_helper(copy, node);
+            if (mp.count(n))
+                start->neighbors.push_back(mp[n]);
+            else
+                start->neighbors.push_back(cloneGraph(n));
         }
-        return copy;
+        return start;
     }
 };
+// space: O(N), time: O(N + M) node + edges
