@@ -28,7 +28,7 @@ class Solution
 public:
     int count = 0;
     map<int, int> m;
-    void find(TreeNode *node, int targetSum, long int currSum)
+    int find(TreeNode *node, int targetSum, long int currSum)
     {
         if (node == nullptr)
             return;
@@ -48,8 +48,8 @@ public:
     };
     int pathSum(TreeNode *root, int targetSum)
     {
-        find(root, targetSum, 0);
-        return count;
+        m[0] = 1; // takes care the case when root val = targetSum
+        return find(root, targetSum, 0);
     }
 };
 // time: O(n), space: O(n)
