@@ -27,29 +27,34 @@ class Solution
 {
 public:
     int count = 0;
-    map<int, int> m;
-    int find(TreeNode *node, int targetSum, long int currSum)
+    map<long int, long int> m;
+
+    void find(TreeNode *node, int targetSum, long int currSum)
     {
         if (node == nullptr)
             return;
         currSum += node->val;
         if (currSum == targetSum)
         {
-            count += m[0] + 1;
+            count = count + m[0] + 1;
         }
         else
         {
-            count += m[currSum - targetSum];
+            if (m.count(currSum - targetSum))
+            {
+                count += m[currSum - targetSum];
+            }
         }
         m[currSum]++;
         find(node->left, targetSum, currSum);
         find(node->right, targetSum, currSum);
-        m[currSum]--;
+        m[currSum]--; // restore
     };
     int pathSum(TreeNode *root, int targetSum)
     {
-        m[0] = 1; // takes care the case when root val = targetSum
-        return find(root, targetSum, 0);
+        find(root, targetSum, 0);
+        return count;
     }
 };
+// prefix method
 // time: O(n), space: O(n)
